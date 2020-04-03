@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // serve static files such as images, CSS files, and JavaScript files
+// documentation @ https://expressjs.com/en/starter/static-files.html
 app.use(express.static(path.join(__dirname, "./public/assets/css/styles.css")));
 app.use(express.static(path.join(__dirname, "./public/assets/js/index.js")));
 
