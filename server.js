@@ -61,6 +61,26 @@ app.post("/api/notes", function(req, res) {
   res.json(newNote);
 });
 
+app.post("/api/notes", function(req, res) {
+  console.log(req.body);
+  fs.readFile("./db/db.json", function(err, data) {
+    if (err) {
+      res.status(500);
+      return res.send("Error when reading from notes.");
+    }
+    const notesObject = JSON.parse(data);
+    notesObject.push(req.body);
+    console.log(notesObject);
+    fs.writeFile("./db/db.json", JSON.stringify(notesObject), function(err) {
+      if (err) {
+        res.status(500);
+        return res.send("Error when writing to notes.");
+      }
+      res.send("Note saved.");
+    });
+  });
+});
+
 // Starts the server to begin listening
 // =============================================================
 app.listen(PORT, function() {
