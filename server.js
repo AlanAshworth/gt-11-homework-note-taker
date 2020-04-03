@@ -1,11 +1,18 @@
-// Dependencies
-// =============================================================
+// ==============================================================================
+// DEPENDENCIES
+// Series of npm packages that we will use to give our server useful functionality
+// ------------------------------------------------------------------------------
 var express = require("express");
 var path = require("path");
 
-// Sets up the Express App
-// =============================================================
+// ==============================================================================
+// EXPRESS CONFIGURATION
+// This sets up the basic properties for our express server
+// ------------------------------------------------------------------------------
+// Tells node that we are creating an "express" server
 var app = express();
+
+// Sets an initial port. We"ll use this later in our listener
 var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
@@ -17,22 +24,23 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "./public/assets/css/styles.css")));
 app.use(express.static(path.join(__dirname, "./public/assets/js/index.js")));
 
-// Routes
-// =============================================================
-
+// ==============================================================================
+// ROUTES
+// Get
+// ------------------------------------------------------------------------------
 // Basic route that sends the user first to the app root
 app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
+  res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 // Wildcard handler that sends the user first to the app root
 app.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
+  res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
 // Route that sends the user first to the notes page
 app.get("/notes", function(req, res) {
-  res.sendFile(path.join(__dirname, "/public/notes.html"));
+  res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
 
 // Display all notes
@@ -73,6 +81,8 @@ app.get("/api/notes/:id", function(req, res) {
   });
 });
 
+// Post
+// ------------------------------------------------------------------------------
 // Add new note to file
 app.post("/api/notes", function(req, res) {
   console.log(req.body);
@@ -94,8 +104,11 @@ app.post("/api/notes", function(req, res) {
   });
 });
 
-// Starts the server to begin listening
-// =============================================================
+// ==============================================================================
+// LISTENER
+// The below code effectively "starts" our server
+// ------------------------------------------------------------------------------
 app.listen(PORT, function() {
   console.log("App listening on: http://localhost:" + PORT);
 });
+// ==============================================================================
