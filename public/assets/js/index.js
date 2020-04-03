@@ -1,3 +1,5 @@
+const uuidv4 = require("uuid/v4");
+
 var $noteTitle = $(".note-title");
 var $noteText = $(".note-textarea");
 var $saveNoteBtn = $(".save-note");
@@ -52,6 +54,7 @@ var renderActiveNote = function() {
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function() {
   var newNote = {
+    id: uuidv4(),
     title: $noteTitle.val(),
     text: $noteText.val()
   };
