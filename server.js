@@ -20,11 +20,17 @@ app.use(express.static(path.join(__dirname, "./public/assets/js/index.js")));
 // Routes
 // =============================================================
 
-// Basic route that sends the user first to the AJAX Page
+// Basic route that sends the user first to the app root
 app.get("/", function(req, res) {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
+// Wildcard handler that sends the user first to the app root
+app.get("*", function(req, res) {
+  res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+// Route that sends the user first to the notes page
 app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
