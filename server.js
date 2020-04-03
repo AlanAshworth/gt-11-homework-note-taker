@@ -44,23 +44,6 @@ app.get("/api/notes/:id", function(req, res) {
   return res.json(false);
 });
 
-// Create New Characters - takes in JSON input
-app.post("/api/notes", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body parsing middleware
-  var newNote = req.body;
-
-  // Using a RegEx Pattern to remove spaces from newCharacter
-  // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-  newNote.noteId = newNote.id.replace(/\s+/g, "").toLowerCase();
-
-  console.log(newNote);
-
-  characters.push(newNote);
-
-  res.json(newNote);
-});
-
 app.post("/api/notes", function(req, res) {
   console.log(req.body);
   fs.readFile("./db/db.json", function(err, data) {
