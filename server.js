@@ -29,19 +29,29 @@ app.get("/api/notes", function(req, res) {
   return res.json(notes);
 });
 
-// Displays a single character, or returns false
 app.get("/api/notes/:id", function(req, res) {
-  var chosen = req.params.note;
+  const noteId = parseInt(req.params.id);
+  console.log(noteId);
 
-  console.log(chosen);
-
-  for (var i = 0; i < notes.length; i++) {
-    if (chosen === notes[i].routeName) {
-      return res.json(notes[i]);
-    }
+  if (!noteId) {
+    res.status(400);
+    return res.send("Select valid id.");
   }
 
-  return res.json(false);
+  fs.readFile("./db/db.json", function(err, data) {
+    if (err) {
+        console.log(err);
+      res.status(500);
+      return res.send("Error when retrieving jokes.");
+    }
+    const notesArray = JSON.parse(data);
+    if (noteId >= 0 && noteId < notesArray.length) {
+      res.json(notesArray[noteId]);
+    } else {
+      res.status(404);
+      return res.send("Could not find note with id " + notesArray[noteId]);
+    }
+  });
 });
 
 app.post("/api/notes", function(req, res) {
