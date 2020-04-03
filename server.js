@@ -24,11 +24,19 @@ app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
-// Displays all characters
+// Display all notes
 app.get("/api/notes", function(req, res) {
-  return res.json(notes);
+  fs.readFile("./db/db.json", function(err, data) {
+    if (err) {
+      res.status(500);
+      return res.send("An error occurred retrieving notes.");
+    }
+    const retrievedNotesArray = JSON.parse(data);
+    res.json(retrievedNotesArray);
+  });
 });
 
+// Display note with id
 app.get("/api/notes/:id", function(req, res) {
   const noteId = parseInt(req.params.id);
   console.log(noteId);
@@ -42,7 +50,7 @@ app.get("/api/notes/:id", function(req, res) {
     if (err) {
         console.log(err);
       res.status(500);
-      return res.send("Error when retrieving jokes.");
+      return res.send("Error when retrieving note.");
     }
     const notesArray = JSON.parse(data);
     if (noteId >= 0 && noteId < notesArray.length) {
@@ -54,6 +62,7 @@ app.get("/api/notes/:id", function(req, res) {
   });
 });
 
+// Add new note to file
 app.post("/api/notes", function(req, res) {
   console.log(req.body);
   fs.readFile("./db/db.json", function(err, data) {
