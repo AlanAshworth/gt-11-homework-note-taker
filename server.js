@@ -12,6 +12,10 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// serve static files such as images, CSS files, and JavaScript files
+app.use(express.static(path.join(__dirname, "./public/assets/css/styles.css")));
+app.use(express.static(path.join(__dirname, "./public/assets/js/index.js")));
+
 // Routes
 // =============================================================
 
