@@ -67,14 +67,21 @@ app.get("/api/notes/:id", function (req, res) {
       res.status(500);
       return res.send("Error when retrieving note.");
     }
-    const notesArray = JSON.parse(data);
-    if (noteId >= 0 && noteId < notesArray.length) {
-      res.json(notesArray[noteId]);
+    // const notesArray = JSON.parse(data);
+    // if (noteId >= 0 && noteId < notesArray.length) {
+    //   res.json(notesArray[noteId]);
+    // } else {
+    //   res.status(404);
+    //   return res.send("Could not find note with id ");
+    // }
+    if (data) {
+      const notesObject = JSON.parse(data);
+      const noteItem = notesObject.filter((note) => note.id === noteId);
+      res.json(noteItem);
     } else {
       res.status(404);
       return res.send("Could not find note with id ");
     }
-    // testing
   });
 });
 
