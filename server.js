@@ -67,21 +67,14 @@ app.get("/api/notes/:id", function (req, res) {
       res.status(500);
       return res.send("Error when retrieving note.");
     }
-    // const notesArray = JSON.parse(data);
-    // if (noteId >= 0 && noteId < notesArray.length) {
-    //   res.json(notesArray[noteId]);
-    // } else {
-    //   res.status(404);
-    //   return res.send("Could not find note with id ");
-    // }
-    if (data) {
-      const notesObject = JSON.parse(data);
-      const noteItem = notesObject.filter(note => note.id === noteId);
-      res.json(noteItem);
+    const notesArray = JSON.parse(data);
+    if (noteId >= 0 && noteId < notesArray.length) {
+      res.json(notesArray[noteId]);
     } else {
       res.status(404);
-      return res.send("No notes found!");
+      return res.send("Could not find note with id ");
     }
+    // testing
   });
 });
 
@@ -113,10 +106,48 @@ app.get("*", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
+// Delete note with id
+app.delete("/api/notes/:id", function (req, res) {
+  const noteId = req.params.id;
+  console.log(noteId);
+
+  if (!noteId) {
+    res.status(400);
+    return res.send("Select valid id.");
+  }
+  fs.readFile("./db/db.json", function (err, data) {
+    if (err) {
+      console.log(err);
+      res.status(500);
+      return res.send("Error when retrieving note.");
+    }
+    if (data) {
+      const notesObject = JSON.parse(data);
+      for (let i = 0; i < notesObject.length; i++) {
+        if (notesObject[i].id === noteId) {
+          notesObject.splice(i, 1);
+        }
+      }
+      fs.writeFile("./db/db.json", JSON.stringify(notesObject), function (err) {
+        if (err) {
+          console.log(err);
+          res.status(500);
+          return res.send("Error when removing note.");
+        }
+        res.send("Note deleted.");
+      });
+      res.status(204);
+    } else {
+      return res.send("Notes empty.");
+    }
+  });
+});
+
 // ==============================================================================
 // LISTENER
-// The below code effectively "starts" our server
+// The below code effectively "starts" the server
 // ------------------------------------------------------------------------------
 app.listen(PORT, function () {
   console.log("App listening on: http://localhost:" + PORT);
 });
+// ==============================================================================
